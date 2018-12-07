@@ -29,7 +29,7 @@ namespace ChefsNDishes
         public IActionResult AllDishes()
         {
             var modelInfo=new dishInfoPackage();
-            modelInfo.allDishes=dbContext.Dishes.Include(d=>d.theChef).ToList();
+            modelInfo.allDishes=dbContext.Dishes.Include(d=>d.theChef).OrderByDescending(dish=>dish.created_at).ToList();
             modelInfo.allChefs=dbContext.Chefs.ToList();
             return View("allDishes",modelInfo);
         }
@@ -79,8 +79,9 @@ namespace ChefsNDishes
         }
 
         [HttpPost("addDish")]
-        public IActionResult AddDish(Dish dish)
+        public IActionResult AddDish(dishInfoPackage InfoPackage)
         {
+            var dish=InfoPackage.dish;
             if(ModelState.IsValid)
             {
                 dbContext.Dishes.Add(dish);
@@ -88,12 +89,12 @@ namespace ChefsNDishes
                 return RedirectToAction("AllDishes");
             }
 
-
-
             var modelInfo=new dishInfoPackage();
             modelInfo.allDishes=dbContext.Dishes.Include(d=>d.theChef).ToList();
             modelInfo.allChefs=dbContext.Chefs.ToList();
             return View("allDishes",modelInfo);
+
+            
         }
     }
 }
