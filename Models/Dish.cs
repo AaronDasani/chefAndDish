@@ -2,7 +2,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
-
+using System.Collections.Generic;
 
 namespace ChefsNDishes.Models
 {
@@ -18,6 +18,7 @@ namespace ChefsNDishes.Models
 
         [Required]
         [Display(Name="Amount of Calories")]
+        [Range(1,1000, ErrorMessage="This amount of calories is not accepted here")]
         public Int32 calories{get;set;}
 
         [Required]
@@ -30,10 +31,20 @@ namespace ChefsNDishes.Models
         [MinLength(5,ErrorMessage="Dish Description should be greater than 5 characters")]
         [Display(Name="Description")]
         public string description{get;set;}
+        public DateTime created_at{get;set;}=DateTime.Now;
+        public DateTime updated_at{get;set;}=DateTime.Now;
 
         [Required]
         [Display(Name="Chef")]
         public Int32 chef_id{get;set;}
         public Chef theChef{get;set;}
+    }
+
+    public class dishInfoPackage
+    {
+        public Dish dish{get;set;}=new Dish();
+        public List<Dish> allDishes{get;set;}
+
+        public List<Chef> allChefs{get;set;}
     }
 }
